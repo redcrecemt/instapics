@@ -6,6 +6,7 @@ import Signin from "./Components/Signin";
 import Signup from "./Components/Signup";
 import Header from "./Components/Header";
 import Postings from "./Components/Postings";
+import Imageupload from "./Components/Imageupload";
 
 function getModalStyle() {
   const top = 50;
@@ -35,78 +36,61 @@ function App() {
   const [modalopen, setModalopen] = useState(false);
   const [loginmodalopen, setLoginModalOpen] = useState(false);
   const [modalStyle] = useState(getModalStyle);
-  const [username, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [user,setUser]=useState(null);
+  const [username, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [user, setUser] = useState(null);
   const classes = useStyles();
-  
 
   useEffect(() => {
-    //effect
-
-    const unsubscribe=  auth.onAuthStateChanged(userAuth=>{
-
-      if(userAuth){
-
-        setUser(userAuth)
-        console.log(userAuth);
+    const unsubscribe = auth.onAuthStateChanged((userAuth) => {
+      if (userAuth) {
+        setUser(userAuth);
+      } else {
+        setUser(null);
       }
-      else {
-        setUser(null)
-      }
-
-    })
-
-    return () => {
-      //cleanup
-      unsubscribe();
-    }
-  }, [user,username])
-  
-  
-  
-  useEffect(() => {
-    db.collection("post").onSnapshot((snapshot) => {
-   //   console.log(snapshot);
-
-      setPost(snapshot.docs.map((d) => ({ id: d.id, post: d.data() })));
     });
+    return () => {
+      unsubscribe();
+    };
+  }, [user, username]);
+
+  useEffect(() => {
+    db.collection("post")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) => {
+        setPost(snapshot.docs.map((d) => ({ id: d.id, post: d.data() })));
+      });
   }, []);
 
-
-
-
-
-  const handleSignup= (e) =>{
+  const handleSignup = (e) => {
     e.preventDefault();
-    auth.createUserWithEmailAndPassword(email,password).then(authUser=>{
-      setModalopen(false);
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((authUser) => {
+        setModalopen(false);
 
-      return authUser.user.updateProfile({
-        displayName: username,
-      });
-    })
-    .catch(err=> alert(err.message))
-
+        return authUser.user.updateProfile({
+          displayName: username,
+        });
+      })
+      .catch((err) => alert(err.message));
   };
 
-
-  const handleLogin =(e)=>{
+  const handleLogin = (e) => {
     e.preventDefault();
-    auth.signInWithEmailAndPassword(email,password)
-    // eslint-disable-next-line
-    .then(authUser=>{ setLoginModalOpen(false); setUserName(authUser.user.displayName); }).
-    catch(err=>alert(err.message));
-  } 
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then((authUser) => {
+        setLoginModalOpen(false);
+        setUserName(authUser.user.displayName);
+      })
+      .catch((err) => alert(err.message));
+  };
 
   return (
     <div className="app">
-      {/* 
-    What I have to do?
-    Upload image(s)
-    set caption
-    post button */}
+      {user?.displayName && <Imageupload username={user.displayName} />}
 
       <Header
         user={user}
