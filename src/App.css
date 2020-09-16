@@ -1,9 +1,9 @@
-*{
-  margin:0px;
+* {
+  margin: 0px;
 }
 
-.app{
-  background-color:#fafafa;
+.app {
+  background-color: #fafafa;
 }
 
 
@@ -11,27 +11,27 @@
   width: 80px;
   object-fit: contain;
 }
-.app__header{
+
+.app__header {
 
   position: sticky;
-  top:0;
-
-object-fit: contain;
-background-color: white;
-padding:20px;
-border-bottom:1px solid gray;
-object-fit: contain;
-justify-content: space-between;
-display: flex;
+  top: 0;
+  object-fit: contain;
+  background-color: white;
+  padding: 20px;
+  border-bottom: 1px solid gray;
+  object-fit: contain;
+  justify-content: space-between;
+  display: flex;
 }
 
-.app__signup{
+.app__signup {
   display: flex !important;
   flex-direction: column !important;
 }
 
-.app__posts{
-  padding:20px;
+.app__posts {
+  padding: 20px;
   /* display: flex; */
   justify-content: center;
 }

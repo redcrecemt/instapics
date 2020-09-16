@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { db, auth } from "./firebase";
-import { makeStyles } from "@material-ui/core/styles";
-import { SpeedDial, SpeedDialIcon } from "@material-ui/lab/";
+import React,{useState,useEffect} from "react";
+import {db,auth} from './firebase';
+import { makeStyles } from '@material-ui/core/styles';
 import "./App.css";
 import Signin from "./Components/Signin";
 import Signup from "./Components/Signup";
@@ -22,33 +21,35 @@ function getModalStyle() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    position: "absolute",
+    position: 'absolute',
     width: 400,
     backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
+    border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
 
   exampleWrapper: {
     position: "sticky",
-    bottom: 0,
+    bottom:0,
     marginTop: theme.spacing(3),
-    height: 380,
+    height: 380
   },
+
 
   speedDial: {
     position: "absolute",
     "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
       bottom: theme.spacing(2),
-      right: theme.spacing(2),
+      right: theme.spacing(2)
     },
     "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
       top: theme.spacing(2),
-      left: theme.spacing(2),
-    },
-  },
+      left: theme.spacing(2)
+    }
+  }
 }));
+
 
 function App() {
   const [posts, setPost] = useState([]);
@@ -59,16 +60,7 @@ function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-  const [open, setOpen] = useState(false);
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleOpen = () => {
-    setOpen(true);
-    alert(1);
-  };
+ 
 
   const classes = useStyles();
 
@@ -120,56 +112,44 @@ function App() {
 
   return (
     <div className="app">
-      <Header
-        user={user}
-        auth={auth}
-        setModalopen={setModalopen}
-        setLoginModalOpen={setLoginModalOpen}
-      />
+    
+        <Header
+          user={user}
+          auth={auth}
+          setModalopen={setModalopen}
+          setLoginModalOpen={setLoginModalOpen}
+        />
 
-      <Signin
-        email={email}
-        password={password}
-        setPassword={setPassword}
-        setEmail={setEmail}
-        handleLogin={handleLogin}
-        setLoginModalOpen={setLoginModalOpen}
-        loginmodalopen={loginmodalopen}
-        modalStyle={modalStyle}
-        classes={classes}
-      />
+        <Signin
+          email={email}
+          password={password}
+          setPassword={setPassword}
+          setEmail={setEmail}
+          handleLogin={handleLogin}
+          setLoginModalOpen={setLoginModalOpen}
+          loginmodalopen={loginmodalopen}
+          modalStyle={modalStyle}
+          classes={classes}
+        />
 
-      <Signup
-        modalopen={modalopen}
-        setModalopen={setModalopen}
-        modalStyle={modalStyle}
-        classes={classes}
-        username={username}
-        setUserName={setUserName}
-        email={email}
-        setEmail={setEmail}
-        password={password}
-        setPassword={setPassword}
-        handleSignup={handleSignup}
-      />
-
+        <Signup
+          modalopen={modalopen}
+          setModalopen={setModalopen}
+          modalStyle={modalStyle}
+          classes={classes}
+          username={username}
+          setUserName={setUserName}
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          handleSignup={handleSignup}
+        />
+      
       <Postings posts={posts} />
 
       {user?.displayName && <Imageupload username={user.displayName} />}
 
-      {user && (
-        <div className={classes.exampleWrapper}>
-          <SpeedDial
-            ariaLabel="Upload"
-            className={classes.speedDial}
-            icon={<SpeedDialIcon />}
-            onClose={handleClose}
-            // onOpen={handleOpen}
-            open={open}
-            onClick={handleOpen}
-          ></SpeedDial>
-        </div>
-      )}
     </div>
   );
 }

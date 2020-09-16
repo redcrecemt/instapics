@@ -1,20 +1,20 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import "./Post.css";
 import Avatar from "@material-ui/core/Avatar";
-import { db,firebase} from "../firebase";
-function Posts({postid,username,caption,imageurl}) {
+import { TextField, IconButton } from "@material-ui/core/";
+import { db, firebase } from "../firebase";
+import { AccountCircle, Send } from "@material-ui/icons/";
 
-  const [postId]=useState(postid);
-  const [comments,setComments]=useState();
-  const [ucomment,setUComment]=useState('');
-
+function Posts({ postid, username, caption, imageurl }) {
+  const [postId] = useState(postid);
+  const [comments, setComments] = useState();
+  const [ucomment, setUComment] = useState("");
 
   useEffect(() => {
-
     let unsubscribe;
 
-    if(postId){
-       unsubscribe = db
+    if (postId) {
+      unsubscribe = db
         .collection("post")
         .doc(postId)
         .collection("message")
@@ -28,30 +28,26 @@ function Posts({postid,username,caption,imageurl}) {
             }))
           );
         });
-        setUComment('');
+      setUComment("");
     }
-
 
     //effect
     return () => {
       //cleanup
       unsubscribe();
     };
-  }, [postId])
+  }, [postId]);
 
-
-  const handlePostComment=(e)=>{
+  const handlePostComment = (e) => {
     e.preventDefault();
-    db
-        .collection("post")
-        .doc(postId)
-        .collection("message").add({
-          username:username,
-          comment:ucomment,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        })
-  }
+    db.collection("post").doc(postId).collection("message").add({
+      username: username,
+      comment: ucomment,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
 
+    setUComment("");
+  };
 
   return (
     <div className="posts">
@@ -76,16 +72,32 @@ function Posts({postid,username,caption,imageurl}) {
       {
         //for posting comments:
 
-         (
-          <div>
-            <input
+        <div>
+          <AccountCircle />
+
+          <TextField
+            value={ucomment}
+            label="your thoughts?"
+            onChange={(e) => {
+              setUComment(e.target.value);
+            }}
+          />
+
+          <IconButton
+            color="secondary"
+            aria-label="post comment"
+            onClick={handlePostComment}
+          >
+            <Send />
+          </IconButton>
+
+          {/* <input
               type="text"
               onChange={(e) => setUComment(e.target.value)}
               value={ucomment}
             ></input>
-            <button onClick={handlePostComment}>Post Comment</button>
-          </div>
-        )
+            <button onClick={handlePostComment}>Post Comment</button> */}
+        </div>
       }
     </div>
   );
