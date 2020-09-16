@@ -2,12 +2,12 @@ import React from 'react'
 import { Button } from "@material-ui/core";
 
 
-const Header= ({user,auth,setModalopen,setLoginModalOpen})=> {
+const Header= ({user,auth,setModalopen, setLoginModalOpen})=> {
     return (
-        <div className="app__header">
-        <img
+      <div className="app__header">
+        <img className="app__headerImage"
           src="http://www.edigitalagency.com.au/wp-content/uploads/instagram-logo-text-black-png.png"
-          className="app__headerImage"
+          
           alt="instafood"
         ></img>
 

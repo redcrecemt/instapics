@@ -1,17 +1,18 @@
 import React,{useState} from 'react'
-import { Button} from '@material-ui/core/';
+import { Button, Modal } from "@material-ui/core/";
 import "./Imageupload.css";
 import {storage,db,firebase} from '../firebase'
 
 
 
 
-const Imageupload = ({username}) => {
+const Imageupload = ({username,isOpen,setIsOpen}) => {
 
     const [progress,setProgress]=useState(0);
     const [caption,setCaption]=useState('');
     const [image,setimage]=useState(null);
-   
+    //const [,setOpen]=useState(isOpen);   
+
 
     const handleUpload = (e) => {
    //   setProgress(0);
@@ -60,19 +61,25 @@ const Imageupload = ({username}) => {
 
 
   return (
-    <div>
+
+    <Modal open={isOpen} onClose={() => setIsOpen(false)}>
+    <div className="imageupload">
       <input
+        placeholder="Enter your caption"
         type="text"
         value={caption}
         onChange={(e) => setCaption(e.target.value)}
-      ></input>
+      >
+
+      </input>
       <input type="file" onChange={handleChange}></input>
 
       <Button onClick={handleUpload}>Upload</Button>
 
-    <progress value={progress}  max="100" ></progress>
+      <progress value={progress} max="100" className="imageupload__progress" ></progress>
     </div>
-  );
+</Modal> 
+ );
 };
 
 export default Imageupload

@@ -1,6 +1,7 @@
-import React,{useState,useEffect} from "react";
-import {db,auth} from './firebase';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, useEffect } from "react";
+import { db, auth } from "./firebase";
+import { makeStyles } from "@material-ui/core/styles";
+import { SpeedDial, SpeedDialIcon } from "@material-ui/lab/";
 import "./App.css";
 import Signin from "./Components/Signin";
 import Signup from "./Components/Signup";
@@ -21,15 +22,33 @@ function getModalStyle() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    position: 'absolute',
+    position: "absolute",
     width: 400,
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
+    border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
-}));
 
+  exampleWrapper: {
+    position: "sticky",
+    bottom: 0,
+    marginTop: theme.spacing(3),
+    height: 380,
+  },
+
+  speedDial: {
+    position: "absolute",
+    "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
+      bottom: theme.spacing(2),
+      right: theme.spacing(2),
+    },
+    "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
+      top: theme.spacing(2),
+      left: theme.spacing(2),
+    },
+  },
+}));
 
 function App() {
   const [posts, setPost] = useState([]);
@@ -40,6 +59,17 @@ function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+    alert(1);
+  };
+
   const classes = useStyles();
 
   useEffect(() => {
@@ -90,8 +120,6 @@ function App() {
 
   return (
     <div className="app">
-      {user?.displayName && <Imageupload username={user.displayName} />}
-
       <Header
         user={user}
         auth={auth}
@@ -126,6 +154,22 @@ function App() {
       />
 
       <Postings posts={posts} />
+
+      {user?.displayName && <Imageupload username={user.displayName} />}
+
+      {user && (
+        <div className={classes.exampleWrapper}>
+          <SpeedDial
+            ariaLabel="Upload"
+            className={classes.speedDial}
+            icon={<SpeedDialIcon />}
+            onClose={handleClose}
+            // onOpen={handleOpen}
+            open={open}
+            onClick={handleOpen}
+          ></SpeedDial>
+        </div>
+      )}
     </div>
   );
 }
